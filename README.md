@@ -5,7 +5,7 @@
 </div>
 
 ## News
-- :t-rex: February 8th, 2025: Our Challenge Repo. is ready!
+- :t-rex: Our team use BSRN and Hyper-Compression Model
 
 
 ## About the Challenge
