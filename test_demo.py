@@ -22,18 +22,25 @@ def select_model(args, device):
         # arXiv: https://arxiv.org/pdf/2204.08759
         # Original Code: https://github.com/icandle/EFDN
         # Ckpts: EFDN_gv.pth
-        from models.team00_EFDN import EFDN
+        from models.team33_EagleSR import BSRN
         name, data_range = f"{model_id:02}_EFDN_baseline", 1.0
         model_path = os.path.join('model_zoo', 'team00_EFDN.pth')
-        model = EFDN()
+        model = BSRN()
         model.load_state_dict(torch.load(model_path), strict=True)
     elif model_id == 33:
         pass # ---- Put your model here as below ---
-        from models.team33_EagleSR import EagleSR
+        from models.team33_EagleSR import BSRN
         name, data_range = f"{model_id:33}_EagleSR", 255.0  # You can choose either 1.0 or 255.0 based on your own model
-        model_path = os.path.join('model_zoo', 'team3_EagleSR.pth')
-        model = EagleSR()
-        model.load_state_dict(torch.load(model_path), strict=True)
+        model_path = os.path.join('model_zoo', 'team33_EagleSR.pth')
+        model = BSRN()
+        state_dict = torch.load(model_path)
+        #Remove unnecessary "module"
+        for k, v in state_dict.items():
+            if k.startswith("module."):
+                state_dict[k[7:]] = state_dict[k]
+                del state_dict[k]
+        model.load_state_dict(state_dict, strict=True)
+
     else:
         raise NotImplementedError(f"Model {model_id} is not implemented.")
 
@@ -285,9 +292,9 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("NTIRE2025-EfficientSR")
-    parser.add_argument("--data_dir", default="../", type=str)
+    parser.add_argument("--data_dir", default="DATA", type=str)
     parser.add_argument("--save_dir", default="../results", type=str)
-    parser.add_argument("--model_id", default=0, type=int)
+    parser.add_argument("--model_id", default=33, type=int)
     parser.add_argument("--include_test", action="store_true", help="Inference on the `DIV2K_LSDIR_test` set")
     parser.add_argument("--ssim", action="store_true", help="Calculate SSIM")
 
