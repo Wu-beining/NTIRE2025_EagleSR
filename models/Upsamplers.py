@@ -1,8 +1,7 @@
 '''
 This repository is used to implement all upsamplers(only x4) and tools for Efficient SR
 @author
-    LI Zehyuan from SIAT
-    LIU yingqi from SIAT
+
 '''
 from functools import partial
 import torch
