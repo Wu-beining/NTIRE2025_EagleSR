@@ -30,16 +30,25 @@ def select_model(args, device):
     elif model_id == 33:
         pass # ---- Put your model here as below ---
         from models.team33_EagleSR import BSRN
-        name, data_range = f"{model_id:33}_EagleSR", 255.0  # You can choose either 1.0 or 255.0 based on your own model
+        name, data_range = f"{model_id:33}_EagleSR", 1.0  # You can choose either 1.0 or 255.0 based on your own model
         model_path = os.path.join('model_zoo', 'team33_EagleSR.pth')
-        model = BSRN()
+        model = BSRN()  
+        torch.save(model.state_dict(),"ori.pth")
+        torch.load("ori.pth")
+        
         state_dict = torch.load(model_path)
+        
         #Remove unnecessary "module"
-        for k, v in state_dict.items():
-            if k.startswith("module."):
-                state_dict[k[7:]] = state_dict[k]
-                del state_dict[k]
-        model.load_state_dict(state_dict, strict=True)
+        # for k, v in state_dict.items():
+        #     if k.startswith("module."):
+        #         state_dict[k[7:]] = state_dict[k]
+        #         del state_dict[k]
+        # print("Model Structure:")
+        # print(model)
+        # print("\nModel Weights:")
+        # for name, param in model.named_parameters():
+        #     print(f"Layer: {name}, Shape: {param.shape}")
+        model.load_state_dict(state_dict['params'])
 
     else:
         raise NotImplementedError(f"Model {model_id} is not implemented.")
